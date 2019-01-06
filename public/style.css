@@ -17,14 +17,57 @@ h1 {
   font-family: fantasy;
 }
 
-.inline-btn button {
-  display: inline-block;
+button {
   width: 120px;
   height: 45px;
   font-size: 18px;
   font-weight: bolder;
-  outline: none;
+  outline: none; 
   border-radius: 25px 25px 25px 0px;
   border: 2px solid black;
   margin: 5px;
+}
+
+.inline-btn button {
+  display: inline-block;
+}
+
+.form {
+  width: 300px;
+}
+
+.form input, .form textarea {
+  display: block !important;
+  margin: 7px !important;
+}
+
+.form label {
+  font-size: 18px;
+  font-weight: bolder;
+}
+
+.form input::placeholder, .form textarea::placeholder {
+  font-size: 15px;
+}
+
+.form input {
+  height: 25px;
+  padding: 7px;
+  width: 300px;
+  outline-color: black;
+}
+
+.form textarea {
+  height: 40px;
+  padding: 7px;
+  width: 300px;
+  outline-color: black;
+}
+
+.form button {
+  margin-top: 20px !important;
+  text-align: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  display: block !important;
 }
