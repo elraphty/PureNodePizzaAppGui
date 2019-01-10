@@ -1,10 +1,14 @@
 <div class="wrap">
     <h2>Enter your email and password to gain access</h2>
-    <div class="form">
-        <label>Email</label>
-        <input type="email" placeholder="Enter email">
-        <label>Password</label>
-        <input type="password" placeholder="Enter password">
-        <button>Login</button>
-    </div>
+    <form id="userLogin"  action="api/users">
+        <div class="formError"></div>
+        <div class="form">
+            <input type="hidden" name="_method" value="GET">
+            <label>Email</label>
+            <input type="email" name="email" placeholder="Enter email">
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Enter password">
+            <button type="submit">Login</button>
+        </div>
+    </form>
 </div>
