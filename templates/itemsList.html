@@ -1,0 +1,23 @@
+<h1>Pizza Menu</h1>
+<h2 id="Action">Instant selection and order</h2>
+<hr />
+<form id="itemList" action="/api/carts" method="POST">
+  <div class="formError"></div>
+  <table id="checksListTable">
+    <tr>
+      <th>Id</th>
+      <th>Name</th>
+      <th>Price</th>
+      <th>Select</th>
+      <th>Order Quantity</th>
+    </tr>
+    <tr id="noChecksMessage">
+      <td colspan="5">You have no checks, please create one!</td>
+    </tr>
+  
+  </table>
+</form>
+
+<div id="createCheckCTA" class="ctaWrapper">
+  <a class="cta green" href="checks/create">Create a Check</a>
+</div>
