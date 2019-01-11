@@ -255,7 +255,7 @@ app.formResponseProcessor = function(formId,requestPayload,responsePayload){
   }
 
   // If login was successful, set the token in localstorage and redirect the user
-  if(formId == 'sessionCreate'){
+  if(formId == 'sessionCreate') {
     app.setSessionToken(responsePayload);
     window.location = '/items';
   }
@@ -372,7 +372,7 @@ app.loadDataOnPage = function() {
 
 // Load the account edit page specifically
 app.deleteCart = function(){
-  app.client.request(undefined,'api/carts','DELETE',undefined,undefined,function(statusCode,responsePayload){
+  app.client.request(undefined,'/api/carts','DELETE',undefined,undefined,function(statusCode,responsePayload){
     if(statusCode == 200){
       console.log('success');
       window.location = '/cart/cleared';
@@ -385,7 +385,7 @@ app.deleteCart = function(){
 
 // place selected pizza order
 app.placeOrder = function(){
-  app.client.request(undefined,'api/order','GET',undefined,undefined,function(statusCode,responsePayload){
+  app.client.request(undefined,'/api/order','GET',undefined,undefined,function(statusCode,responsePayload){
     if(statusCode == 200){
       console.log('success');
       window.location = '/order/placed';
@@ -429,8 +429,8 @@ app.loadAccountEditPage = function() {
 };
 
 // Load the dashboard page specifically
-app.loadItemsListPage = function(){
-    app.client.request(undefined, 'api/carts', 'GET', undefined,undefined, function(statusCode, responsePayload) {
+app.loadItemsListPage = function() {
+    app.client.request(undefined, '/api/carts', 'GET', undefined,undefined, function(statusCode, responsePayload) {
       // Check if statusCodes is neither 403 nor 400 so the payload can be processed
       if(statusCode != 403 || statusCode != 400){
         
@@ -443,7 +443,7 @@ app.loadItemsListPage = function(){
           let items = responsePayload.items;
           // Retrieve each item and add it to a table row
           items.forEach(function(item) {
-              cartData.forEach(function(cartItem){
+              cartData.forEach(function(cartItem) {
                 cartItems.push(cartItem.id);
                 cartQuantities.push(cartItem.quantity);
               });
