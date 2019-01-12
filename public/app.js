@@ -407,10 +407,11 @@ app.loadAccountEditPage = function() {
     };
     app.client.request(undefined, '/api/users', 'GET', queryStringObject, undefined, function(statusCode, responsePayload) {
       if(statusCode === 200) {
+        // console.log(responsePayload);
         // Put the data into the forms as values where needed
-        document.querySelector("#accountEdit1 .customerNameInput").value = responsePayload.customerName;
-        document.querySelector("#accountEdit1 .addressInput").value = responsePayload.address;
-        document.querySelector("#accountEdit1 .displayEmailInput").value = responsePayload.email;
+        document.querySelector("#accountEdit1 .customerNameInput").value = responsePayload.userName;
+        document.querySelector("#accountEdit1 .addressInput").value = responsePayload.userAddress;
+        document.querySelector("#accountEdit1 .displayEmailInput").value = responsePayload.userEmail;
 
         // Put the hidden phone field into both forms
         let hiddenPhoneInputs = document.querySelectorAll("input.hiddenPhoneNumberInput");
