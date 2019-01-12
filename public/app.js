@@ -21,8 +21,8 @@ app.client.request = function(headers,path,method,queryStringObject,payload,call
   path = typeof(path) == 'string' ? path : '/';
   method = typeof(method) == 'string' && ['POST','GET','PUT','DELETE'].indexOf(method.toUpperCase()) > -1 ? method.toUpperCase() : 'GET';
   queryStringObject = typeof(queryStringObject) == 'object' && queryStringObject !== null ? queryStringObject : {};
-  payload = typeof(payload) == 'object' && payload !== null ? payload : {};
-  callback = typeof(callback) == 'function' ? callback : false;
+  payload = typeof(payload) === 'object' && payload !== null ? payload : {};
+  callback = typeof(callback) === 'function' ? callback : false;
 
   // For each query string parameter sent, add it to the path
   let requestUrl = path+'?';
@@ -125,7 +125,7 @@ app.logUserOut = function() {
   let queryStringObject = {
     'id' : tokenId
   };
-  app.client.request(undefined,'api/tokens','DELETE',queryStringObject,undefined,function(statusCode,responsePayload){
+  app.client.request(undefined, '/api/tokens', 'DELETE',queryStringObject, undefined, function(statusCode, responsePayload){
     // Set the app.config token as false
     app.setSessionToken(false);
 
@@ -216,7 +216,7 @@ app.bindForms = function() {
             }
           } else {
             // If successful, send to form response processor
-            app.formResponseProcessor(formId,payload,responsePayload);
+            app.formResponseProcessor(formId, payload, responsePayload);
           }
 
         });
@@ -226,7 +226,7 @@ app.bindForms = function() {
 };
 
 // Form response processor
-app.formResponseProcessor = function(formId,requestPayload,responsePayload){
+app.formResponseProcessor = function(formId, requestPayload,responsePayload){
   let functionToCall = false;
   // If account creation was successful, try to immediately log the user in
   if(formId === 'accountCreate'){
@@ -255,13 +255,13 @@ app.formResponseProcessor = function(formId,requestPayload,responsePayload){
   }
 
   // If login was successful, set the token in localstorage and redirect the user
-  if(formId == 'sessionCreate') {
+  if(formId === 'sessionCreate') {
     app.setSessionToken(responsePayload);
     window.location = '/items';
   }
 
   // If the user just deleted their account, redirect them to the account-delete page
-  if(formId == 'accountEdit3'){
+  if(formId === 'accountEdit3'){
     app.logUserOut(false);
     window.location = '/account/deleted';
   }
@@ -273,7 +273,7 @@ app.formResponseProcessor = function(formId,requestPayload,responsePayload){
   }
 
   // If the user just created a new check successfully, redirect back to the dashboard
-  if(formId == 'itemList'){
+  if(formId === 'itemList'){
     window.location.reload();
   }
 };
@@ -311,7 +311,7 @@ app.setLoggedInClass = function(add) {
 app.setSessionToken = function(token) {
   app.config.sessionToken = token;
   let tokenString = JSON.stringify(token);
-  localStorage.setItem('token',tokenString);
+  localStorage.setItem('token', tokenString);
   if(typeof(token) === 'object'){
     app.setLoggedInClass(true);
   } else {
@@ -328,12 +328,12 @@ app.renewToken = function(callback) {
       'id' : currentToken.id,
       'extend' : true,
     };
-    app.client.request(undefined, 'api/tokens', 'PUT', undefined,payload, function(statusCode, responsePayload){
+    app.client.request(undefined, '/api/tokens', 'PUT', undefined,payload, function(statusCode, responsePayload) {
       // Display an error on the form if needed
-      if(statusCode == 200){
+      if(statusCode === 200){
         // Get the new token details
         let queryStringObject = {'id' : currentToken.id };
-        app.client.request(undefined,'api/tokens','GET',queryStringObject,undefined,function(statusCode,responsePayload){
+        app.client.request(undefined,'/api/tokens','GET',queryStringObject,undefined,function(statusCode,responsePayload){
           // Display an error on the form if needed
           if(statusCode === 200){
             app.setSessionToken(responsePayload);
@@ -357,22 +357,22 @@ app.renewToken = function(callback) {
 app.loadDataOnPage = function() {
   // Get the current page from the body class
   let bodyClasses = document.querySelector("body").classList;
-  let primaryClass = typeof(bodyClasses[0]) == 'string' ? bodyClasses[0] : false;
+  let primaryClass = typeof(bodyClasses[0]) === 'string' ? bodyClasses[0] : false;
 
   // Logic for dashboard page
-  if(primaryClass == 'itemsList'){
+  if(primaryClass === 'itemsList'){
     app.loadItemsListPage();
   }
 
   // Logic for account settings page
-  if(primaryClass == 'accountEdit'){
+  if(primaryClass === 'accountEdit'){
     app.loadAccountEditPage();
   }
 };
 
 // Load the account edit page specifically
-app.deleteCart = function(){
-  app.client.request(undefined,'/api/carts','DELETE',undefined,undefined,function(statusCode,responsePayload){
+app.deleteCart = function() {
+  app.client.request(undefined, '/api/carts', 'DELETE', undefined,undefined, function(statusCode, responsePayload){
     if(statusCode == 200){
       console.log('success');
       window.location = '/cart/cleared';
@@ -384,9 +384,9 @@ app.deleteCart = function(){
 };
 
 // place selected pizza order
-app.placeOrder = function(){
-  app.client.request(undefined,'/api/order','GET',undefined,undefined,function(statusCode,responsePayload){
-    if(statusCode == 200){
+app.placeOrder = function() {
+  app.client.request(undefined, '/api/orders', 'GET', undefined,undefined, function(statusCode, responsePayload) {
+    if(statusCode === 200){
       console.log('success');
       window.location = '/order/placed';
     } else {
@@ -405,7 +405,7 @@ app.loadAccountEditPage = function() {
     let queryStringObject = {
       'email' : email
     };
-    app.client.request(undefined, 'api/users', 'GET', queryStringObject, undefined, function(statusCode, responsePayload) {
+    app.client.request(undefined, '/api/users', 'GET', queryStringObject, undefined, function(statusCode, responsePayload) {
       if(statusCode === 200) {
         // Put the data into the forms as values where needed
         document.querySelector("#accountEdit1 .customerNameInput").value = responsePayload.customerName;
@@ -437,10 +437,12 @@ app.loadItemsListPage = function() {
         // check if the statusCode of the response is 200 so the page would be customized for existing order
         if(statusCode === 200) {
           let cartData = responsePayload.cartItems;
+          console.log(responsePayload.cartItems);
           let cartItems = [];
           let cartQuantities = [];
           let cartRow = 0;
           let items = responsePayload.items;
+          console.log(items);
           // Retrieve each item and add it to a table row
           items.forEach(function(item) {
               cartData.forEach(function(cartItem) {
@@ -483,7 +485,7 @@ app.loadItemsListPage = function() {
             app.bindPlaceOrderButton();
         } else {
           let items = responsePayload.items;
-          console.log(items);
+          //console.log(items);
           // Retrieve each item and add it to a table row
           items.forEach(function(item) {
             let table = document.getElementById("checksListTable");
